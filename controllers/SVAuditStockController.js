@@ -59,18 +59,36 @@ class SVAuditStockController extends BaseController {
         // order: sortOptions,
         // ...paginationOptions
       });
+      // items.rows.forEach((item) => {
+      //   //each rows have audits array as [] having value as qty need sum of that qty in array
+      //   const totalAuditedQty = item.audits.reduce((sum, audit) => {
+      //     return sum + audit.qty;
+      //   }, 0);
+      //   item.dataValues.totalAuditedQty = totalAuditedQty;
+      // });
+      let grandTotalAuditedQty = 0;
+      let stockTotalQty = 0;
+
       items.rows.forEach((item) => {
-        //each rows have audits array as [] having value as qty need sum of that qty in array
         const totalAuditedQty = item.audits.reduce((sum, audit) => {
-          return sum + audit.qty;
+          return sum + Number(audit.qty || 0);
         }, 0);
+
         item.dataValues.totalAuditedQty = totalAuditedQty;
+        grandTotalAuditedQty += totalAuditedQty;
+        stockTotalQty += item.quantity;
       });
+
       // Respond with paginated data and metadata
       res.status(200).json({
         status: 200,
         message: `${this.model.name}s fetched successfully`,
         result: items.rows,
+        resultView: {
+          grandTotalAuditedQty: grandTotalAuditedQty,
+          stockTotalQty: stockTotalQty,
+          balanceQty: stockTotalQty - grandTotalAuditedQty,
+        },
         pagination: {
           totalItems: items.count,
           totalPages: Math.ceil(items.count / limit),
