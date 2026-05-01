@@ -19,9 +19,14 @@ module.exports = (sequelize, DataTypes) => {
       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       auditedBy: { type: DataTypes.STRING },
       auditStockId: { type: DataTypes.INTEGER },
-      qty: { type: DataTypes.INTEGER },
+      qty: { type: DataTypes.DOUBLE },
       scheduleId: { type: DataTypes.INTEGER },
       location: { type: DataTypes.STRING },
+      auditedOn: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
     },
     {
       sequelize,

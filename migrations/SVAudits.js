@@ -11,9 +11,14 @@ module.exports = {
       },
       auditedBy: { type: Sequelize.STRING },
       auditStockId: { type: Sequelize.INTEGER },
-      qty: { type: Sequelize.INTEGER },
+      qty: { type: Sequelize.DOUBLE },
       scheduleId: { type: Sequelize.INTEGER },
       location: { type: Sequelize.STRING },
+      auditedOn: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+      },
     });
   },
   async down(queryInterface, Sequelize) {
